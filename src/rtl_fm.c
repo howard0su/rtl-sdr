@@ -48,19 +48,20 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #ifndef _WIN32
 #include <unistd.h>
 #else
-#include <Windows.h>
+#include <windows.h>
 #include <fcntl.h>
 #include <io.h>
 #include "getopt/getopt.h"
 #define usleep(x) Sleep(x/1000)
 #define round(x) (x > 0.0 ? floor(x + 0.5): ceil(x - 0.5))
+#define _USE_MATH_DEFINES
 #endif
 
+#include <math.h>
 #include <pthread.h>
 #include <libusb.h>
 
@@ -152,7 +153,7 @@ void usage(void)
 		"\t[-U enables USB mode (default: off)]\n"
 		//"\t[-D enables DSB mode (default: off)]\n"
 		"\t[-R enables raw mode (default: off, 2x16 bit output)]\n"
-		"\t[-F enables high quality FIR (default: off/square)]\n"
+		"\t[-F enables Hamming FIR (default: off/square)]\n"
 		"\t[-D enables de-emphasis (default: off)]\n"
 		"\t[-C enables DC blocking of output (default: off)]\n"
 		"\t[-A std/fast/lut choose atan math (default: std)]\n"
@@ -1021,6 +1022,10 @@ int main(int argc, char **argv)
 	/*rtlsdr_read_async(dev, rtlsdr_callback, (void *)(&fm),
 			      DEFAULT_ASYNC_BUF_NUMBER,
 			      ACTUAL_BUF_LENGTH);*/
+
+	while (!do_exit) {
+		sync_read(buffer, ACTUAL_BUF_LENGTH, &fm);
+	}
 
 	while (!do_exit) {
 		sync_read(buffer, ACTUAL_BUF_LENGTH, &fm);

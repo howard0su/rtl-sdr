@@ -32,4 +32,3 @@ rtl_adsb_LDADD        = librtlsdr.la $(LIBM)
 
 rtl_power_SOURCES     = rtl_power.c
 rtl_power_LDADD       = librtlsdr.la $(LIBM)
-
